@@ -85,7 +85,7 @@ class TestFullSeed:
                     select(Country.code, func.avg(Employee.base_salary))
                     .join(Employee, Employee.country_id == Country.id)
                     .group_by(Country.code)
-                ).tuples()
+                ).all()
             )
 
         assert averages["US"] > averages["IN"]
