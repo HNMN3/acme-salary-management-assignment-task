@@ -1,0 +1,10 @@
+{
+  "name": "acme-salary-management",
+  "private": true,
+  "scripts": {
+    "up": "docker compose up --build",
+    "down": "docker compose down",
+    "test:backend": "docker compose run --rm --build backend pytest",
+    "test": "npm run test:backend"
+  }
+}

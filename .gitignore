@@ -1,1 +1,17 @@
 internal/
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+
+# Local data and env
+*.db
+*.db-shm
+*.db-wal
+.env
