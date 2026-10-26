@@ -29,3 +29,12 @@ def engine() -> Iterator[Engine]:
 def db_session(engine: Engine) -> Iterator[Session]:
     with Session(engine) as session:
         yield session
+
+
+@pytest.fixture
+def api_client(db_session: Session) -> TestClient:
+    from app.db.session import get_db
+
+    app = create_app()
+    app.dependency_overrides[get_db] = lambda: db_session
+    return TestClient(app)
