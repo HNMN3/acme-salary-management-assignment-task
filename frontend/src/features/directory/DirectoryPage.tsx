@@ -98,7 +98,8 @@ export function DirectoryPage() {
       ) : (
         <>
           <Text size="sm" c="dimmed" mb="xs">
-            {result.total.toLocaleString("en-US")} employees
+            {result.total.toLocaleString("en-US")}{" "}
+            {result.total === 1 ? "employee" : "employees"}
           </Text>
           {result.items.length === 0 ? (
             <Text ta="center" py="xl" c="dimmed">
@@ -113,9 +114,11 @@ export function DirectoryPage() {
               onEdit={setEditing}
             />
           )}
-          <Group justify="center" mt="md">
-            <Pagination value={page} onChange={setPage} total={totalPages} />
-          </Group>
+          {result.total > 0 && (
+            <Group justify="center" mt="md">
+              <Pagination value={page} onChange={setPage} total={totalPages} />
+            </Group>
+          )}
         </>
       )}
 

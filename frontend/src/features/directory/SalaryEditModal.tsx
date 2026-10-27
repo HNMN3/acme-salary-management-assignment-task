@@ -87,7 +87,10 @@ function SalaryForm({ employee, onClose, onSaved }: SalaryFormProps) {
           allowNegative={false}
           hideControls
           value={baseSalary}
-          onChange={setBaseSalary}
+          onChange={(value) => {
+            setBaseSalary(value);
+            setErrors((current) => ({ ...current, baseSalary: undefined }));
+          }}
           error={errors.baseSalary}
           data-autofocus
         />
@@ -99,7 +102,10 @@ function SalaryForm({ employee, onClose, onSaved }: SalaryFormProps) {
           allowNegative={false}
           hideControls
           value={bonus}
-          onChange={setBonus}
+          onChange={(value) => {
+            setBonus(value);
+            setErrors((current) => ({ ...current, bonus: undefined }));
+          }}
           error={errors.bonus}
         />
         <Text size="sm" c="dimmed">

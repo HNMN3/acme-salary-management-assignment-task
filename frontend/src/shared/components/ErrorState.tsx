@@ -1,4 +1,4 @@
-import { Alert, Button } from "@mantine/core";
+import { Alert, Button, Stack, Text } from "@mantine/core";
 
 interface ErrorStateProps {
   message: string;
@@ -8,12 +8,14 @@ interface ErrorStateProps {
 export function ErrorState({ message, onRetry }: ErrorStateProps) {
   return (
     <Alert color="red" title="Something went wrong">
-      {message}
-      {onRetry && (
-        <Button mt="sm" size="xs" variant="light" color="red" onClick={onRetry}>
-          Retry
-        </Button>
-      )}
+      <Stack gap="sm" align="flex-start">
+        <Text size="sm">{message}</Text>
+        {onRetry && (
+          <Button size="xs" variant="outline" color="red" onClick={onRetry}>
+            Retry
+          </Button>
+        )}
+      </Stack>
     </Alert>
   );
 }

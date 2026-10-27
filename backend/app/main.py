@@ -1,10 +1,17 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+import app.models  # noqa: F401  (registers tables on Base.metadata)
 from app.api.v1.router import api_router
 from app.core.config import Settings, settings as default_settings
+from app.db.base import Base
+from app.db.session import get_engine
 from app.exceptions import EmployeeNotFoundError
+from seed.seed import seed_database
 
 
 def _employee_not_found_handler(
@@ -16,7 +23,15 @@ def _employee_not_found_handler(
 
 
 def create_app(settings: Settings = default_settings) -> FastAPI:
-    app = FastAPI(title=settings.app_name)
+    @asynccontextmanager
+    async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+        engine = get_engine()
+        Base.metadata.create_all(engine)
+        if settings.seed_on_startup:
+            seed_database(engine)
+        yield
+
+    app = FastAPI(title=settings.app_name, lifespan=lifespan)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,

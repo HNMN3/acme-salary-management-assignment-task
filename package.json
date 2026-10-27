@@ -5,6 +5,8 @@
     "up": "docker compose up --build",
     "down": "docker compose down",
     "seed": "docker compose run --rm backend python -m seed.seed",
+    "prod:up": "docker compose -f docker-compose.prod.yml up --build -d",
+    "prod:down": "docker compose -f docker-compose.prod.yml down",
     "test:backend": "docker compose run --rm --build backend pytest",
     "test:frontend": "docker compose run --rm --build frontend npm test",
     "test": "npm run test:backend && npm run test:frontend"

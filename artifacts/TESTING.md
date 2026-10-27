@@ -2,7 +2,7 @@
 
 ## Principles
 
-- **Fast and deterministic.** The backend suite (143 tests) runs in about 2 seconds, the frontend suite (65 tests) in about 10-25 seconds. Nothing sleeps, nothing depends on wall-clock time, and no test asserts latency. Performance is measured separately in [PERFORMANCE.md](PERFORMANCE.md).
+- **Fast and deterministic.** The backend suite (154 tests) runs in about 2 seconds, the frontend suite (66 tests) in about 10-25 seconds. Nothing sleeps, nothing depends on wall-clock time, and no test asserts latency. Performance is measured separately in [PERFORMANCE.md](PERFORMANCE.md).
 - **Isolated.** Every backend test gets its own in-memory SQLite database. Every frontend test stubs `fetch` itself.
 - **Small data.** Tests build the few rows they need through factories, so a failure points at one behaviour. The exception is the seed test, which checks the real 10,000-row count.
 - **Tests first for the backend.** Each backend feature was committed in two steps: the failing tests, then the implementation.

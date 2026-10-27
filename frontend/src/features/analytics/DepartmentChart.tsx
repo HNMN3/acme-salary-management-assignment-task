@@ -24,7 +24,14 @@ export function DepartmentChart({ stats }: { stats: DepartmentStats[] }) {
       <ResponsiveContainer width="100%" height={320}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey="name" />
+          <XAxis
+            dataKey="name"
+            interval={0}
+            angle={-35}
+            textAnchor="end"
+            height={70}
+            tick={{ fontSize: 12 }}
+          />
           <YAxis tickFormatter={formatCompactCurrency} />
           <Tooltip formatter={(value) => formatCurrency(Number(value))} />
           <Legend />

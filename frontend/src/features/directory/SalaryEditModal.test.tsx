@@ -67,6 +67,18 @@ describe("SalaryEditModal", () => {
     expect(screen.getByText("Total compensation: $105,000")).toBeInTheDocument();
   });
 
+  it("clears a field's error once the value is edited", async () => {
+    renderModal();
+
+    await replaceValue("Base salary", "0");
+    await userEvent.click(screen.getByRole("button", { name: "Save" }));
+    expect(await screen.findByText("Base salary must be at least $1")).toBeInTheDocument();
+
+    await userEvent.type(screen.getByLabelText("Base salary"), "5");
+
+    expect(screen.queryByText("Base salary must be at least $1")).not.toBeInTheDocument();
+  });
+
   it("updates the total compensation preview as values change", async () => {
     renderModal();
 

@@ -103,6 +103,7 @@ describe("DirectoryPage", () => {
     renderWithProviders(<DirectoryPage />);
 
     expect(await screen.findByText("No employees match your filters.")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "1" })).not.toBeInTheDocument();
   });
 
   describe("editing salary", () => {

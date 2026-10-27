@@ -59,7 +59,7 @@ Recorded because they show the review was real.
 
 ## How output was verified
 
-- Every checkpoint ended with the full relevant test suite passing: 143 backend tests and 65 frontend tests at the end of checkpoint 12.
+- Every checkpoint ended with the full relevant test suite passing: 154 backend tests and 66 frontend tests at the end of checkpoint 13.
 - Analytics tests compare against hand-computed numbers on small fixtures.
 - A smoke run against the full 10,000-row seed exercised every endpoint.
 - Latency numbers come from a script, not from assertions.
@@ -67,6 +67,6 @@ Recorded because they show the review was real.
 
 ## What was not verified
 
-- The Docker paths (`npm run up`, `npm test` through containers) had not been run on the development machine when this note was written, because Docker Desktop was not running. Tests were run directly with the local Python and Node toolchains.
+- Checkpoints 2 to 12 were tested with the local Python and Node toolchains because Docker was not running. At checkpoint 13 the Docker paths were run for the first time: both test suites through `npm test`, `npm run seed`, the development stack and the production stack all worked. A clean `git clone` was not re-run from scratch.
 - Charts were tested through a mocked container in jsdom and need a visual check in a real browser.
 - Open points kept visible rather than hidden: search scans the table; `updated_at` does not change when a salary is re-submitted with identical values; the repository commits the salary update, so the transaction boundary sits one layer lower than a strict reading of the layering table suggests.
