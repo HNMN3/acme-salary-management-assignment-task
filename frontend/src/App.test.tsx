@@ -13,10 +13,11 @@ describe("App", () => {
   it("shows the backend as online when the health check succeeds", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => ({ status: "ok" }),
-      }),
+      vi.fn(async (url: string) =>
+        String(url).endsWith("/health")
+          ? { ok: true, json: async () => ({ status: "ok" }) }
+          : { ok: false, status: 500, statusText: "Error", json: async () => ({}) },
+      ),
     );
 
     renderWithProviders(<App />);
@@ -41,11 +42,11 @@ describe("App", () => {
       "aria-selected",
       "true",
     );
-    expect(screen.getByText("Employee directory")).toBeInTheDocument();
+    expect(screen.getByLabelText("Search")).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("tab", { name: "Analytics" }));
 
     expect(screen.getByText("Analytics dashboard")).toBeInTheDocument();
-    expect(screen.queryByText("Employee directory")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Search")).not.toBeInTheDocument();
   });
 });
