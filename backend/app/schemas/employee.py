@@ -13,6 +13,14 @@ class EmployeeListQuery(BaseModel):
     department_id: int | None = None
 
 
+MAX_COMPENSATION = 10_000_000
+
+
+class SalaryUpdate(BaseModel):
+    base_salary: int = Field(gt=0, le=MAX_COMPENSATION)
+    bonus: int = Field(ge=0, le=MAX_COMPENSATION)
+
+
 class DepartmentRef(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

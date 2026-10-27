@@ -3,7 +3,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import ColumnElement, func, or_, select
-from sqlalchemy.orm import Session, contains_eager
+from sqlalchemy.orm import Session, contains_eager, joinedload
 
 from app.models import Country, Department, Employee
 
@@ -62,6 +62,22 @@ class EmployeeRepository:
             .offset((criteria.page - 1) * criteria.page_size)
         )
         return self._session.scalars(statement).all(), total or 0
+
+    def get_by_id(self, employee_id: int) -> Employee | None:
+        statement = (
+            select(Employee)
+            .options(joinedload(Employee.department), joinedload(Employee.country))
+            .where(Employee.id == employee_id)
+        )
+        return self._session.scalars(statement).first()
+
+    def update_salary(
+        self, employee: Employee, base_salary: int, bonus: int
+    ) -> Employee:
+        employee.base_salary = base_salary
+        employee.bonus = bonus
+        self._session.commit()
+        return employee
 
     @staticmethod
     def _filters(criteria: EmployeeListCriteria) -> list[ColumnElement[bool]]:
