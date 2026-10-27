@@ -34,7 +34,7 @@ Replace the spreadsheets ACME's HR team uses to manage salary data for 10,000 em
 | Payroll execution, tax, payslips | Different product (payments and compliance); the brief is data management and insight | Banking, tax and legal logic per country | Never within this system's remit |
 | Employee self-service | The persona is HR only | Second persona, auth, privacy rules | Employees need to view their own pay |
 | Import / export | Excel is being replaced, and the seed provides initial data; migration is a one-off | File parsing, validation, error reporting | A real data migration is needed |
-| Substring / full-text search | Prefix search stays index-friendly at 10,000 rows; infix search forces full scans | FTS table and sync logic | The data set outgrows scan performance |
+| Substring / full-text search | Prefix search keeps matches predictable and is fast at 10,000 rows; infix search matches far more rows and needs a proper index | FTS table and sync logic | The data set outgrows scan performance |
 
 ## Success criteria
 - Directory pages, filters and search respond quickly with 10,000 rows (measured and reported, not asserted in tests).
