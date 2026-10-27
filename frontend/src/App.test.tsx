@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import App from "./App";
@@ -29,5 +30,22 @@ describe("App", () => {
     renderWithProviders(<App />);
 
     expect(await screen.findByText("Backend offline")).toBeInTheDocument();
+  });
+
+  it("switches between the Directory and Analytics tabs", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("network")));
+
+    renderWithProviders(<App />);
+
+    expect(screen.getByRole("tab", { name: "Directory" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByText("Employee directory")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("tab", { name: "Analytics" }));
+
+    expect(screen.getByText("Analytics dashboard")).toBeInTheDocument();
+    expect(screen.queryByText("Employee directory")).not.toBeInTheDocument();
   });
 });
