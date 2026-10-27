@@ -3,13 +3,14 @@ import { useState } from "react";
 
 import { listEmployees } from "../../api/employees";
 import { getFilterOptions } from "../../api/meta";
-import type { EmployeeSortField, SortOrder } from "../../api/types";
+import type { Employee, EmployeeSortField, SortOrder } from "../../api/types";
 import { ErrorState } from "../../shared/components/ErrorState";
 import { LoadingState } from "../../shared/components/LoadingState";
 import { useAsyncData } from "../../shared/hooks/useAsyncData";
 import { useDebouncedValue } from "../../shared/hooks/useDebouncedValue";
 import { DirectoryFilters } from "./DirectoryFilters";
 import { EmployeeTable } from "./EmployeeTable";
+import { SalaryEditModal } from "./SalaryEditModal";
 
 const PAGE_SIZE = 50;
 const SEARCH_DEBOUNCE_MS = 300;
@@ -21,6 +22,7 @@ export function DirectoryPage() {
   const [sortBy, setSortBy] = useState<EmployeeSortField>("name");
   const [order, setOrder] = useState<SortOrder>("asc");
   const [page, setPage] = useState(1);
+  const [editing, setEditing] = useState<Employee | null>(null);
 
   const debouncedSearch = useDebouncedValue(search.trim(), SEARCH_DEBOUNCE_MS);
 
@@ -108,6 +110,7 @@ export function DirectoryPage() {
               sortBy={sortBy}
               order={order}
               onSort={changeSort}
+              onEdit={setEditing}
             />
           )}
           <Group justify="center" mt="md">
@@ -115,6 +118,15 @@ export function DirectoryPage() {
           </Group>
         </>
       )}
+
+      <SalaryEditModal
+        employee={editing}
+        onClose={() => setEditing(null)}
+        onSaved={() => {
+          setEditing(null);
+          employees.reload();
+        }}
+      />
     </>
   );
 }

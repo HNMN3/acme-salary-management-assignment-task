@@ -105,6 +105,46 @@ describe("DirectoryPage", () => {
     expect(await screen.findByText("No employees match your filters.")).toBeInTheDocument();
   });
 
+  describe("editing salary", () => {
+    it("opens the modal for the chosen employee", async () => {
+      renderWithProviders(<DirectoryPage />);
+      await screen.findByText("First1 Last1");
+
+      await userEvent.click(screen.getByRole("button", { name: "Edit salary for First2 Last2" }));
+
+      expect(await screen.findByRole("dialog", { name: "Edit salary" })).toBeInTheDocument();
+      expect(screen.getByLabelText("Base salary")).toHaveValue("$100,000");
+    });
+
+    it("closes the modal and reloads the list after saving", async () => {
+      renderWithProviders(<DirectoryPage />);
+      await screen.findByText("First1 Last1");
+      await userEvent.click(screen.getByRole("button", { name: "Edit salary for First1 Last1" }));
+      const before = employeeRequests().length;
+      employeeResponse = () => page([employee(1, { base_salary: 120_000, total_compensation: 125_000 })]);
+
+      await userEvent.click(await screen.findByRole("button", { name: "Save" }));
+
+      expect(await screen.findByText("$125,000")).toBeInTheDocument();
+      expect(employeeRequests().length).toBe(before + 1);
+      await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+      const patch = fetchMock.mock.calls.find(([, init]) => init?.method === "PATCH");
+      expect(String(patch![0])).toMatch(/\/employees\/1\/salary$/);
+    });
+
+    it("keeps the list unchanged when the modal is cancelled", async () => {
+      renderWithProviders(<DirectoryPage />);
+      await screen.findByText("First1 Last1");
+      await userEvent.click(screen.getByRole("button", { name: "Edit salary for First1 Last1" }));
+      const before = employeeRequests().length;
+
+      await userEvent.click(await screen.findByRole("button", { name: "Cancel" }));
+
+      await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+      expect(employeeRequests().length).toBe(before);
+    });
+  });
+
   it("shows an error with a retry that reloads the list", async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (String(url).includes("/meta/filters")) {

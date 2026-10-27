@@ -1,4 +1,4 @@
-import { Table, Text, UnstyledButton } from "@mantine/core";
+import { Button, Table, Text, UnstyledButton } from "@mantine/core";
 
 import type { Employee, EmployeeSortField, SortOrder } from "../../api/types";
 import { formatCurrency } from "../../shared/format";
@@ -24,6 +24,7 @@ interface EmployeeTableProps {
   sortBy: EmployeeSortField;
   order: SortOrder;
   onSort: (field: EmployeeSortField) => void;
+  onEdit: (employee: Employee) => void;
 }
 
 export function EmployeeTable({
@@ -31,6 +32,7 @@ export function EmployeeTable({
   sortBy,
   order,
   onSort,
+  onEdit,
 }: EmployeeTableProps) {
   return (
     <Table.ScrollContainer minWidth={900}>
@@ -59,6 +61,7 @@ export function EmployeeTable({
                 </UnstyledButton>
               </Table.Th>
             ))}
+            <Table.Th />
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -79,6 +82,16 @@ export function EmployeeTable({
               <Table.Td ta="right">{formatCurrency(employee.bonus)}</Table.Td>
               <Table.Td ta="right">
                 {formatCurrency(employee.total_compensation)}
+              </Table.Td>
+              <Table.Td>
+                <Button
+                  size="compact-xs"
+                  variant="light"
+                  aria-label={`Edit salary for ${employee.first_name} ${employee.last_name}`}
+                  onClick={() => onEdit(employee)}
+                >
+                  Edit
+                </Button>
               </Table.Td>
             </Table.Tr>
           ))}
