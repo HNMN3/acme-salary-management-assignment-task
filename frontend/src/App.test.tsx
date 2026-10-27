@@ -46,7 +46,7 @@ describe("App", () => {
 
     await userEvent.click(screen.getByRole("tab", { name: "Analytics" }));
 
-    expect(screen.getByText("Analytics dashboard")).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Summary" })).toBeInTheDocument();
     expect(screen.queryByLabelText("Search")).not.toBeInTheDocument();
   });
 });
